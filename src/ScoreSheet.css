@@ -10,6 +10,19 @@
   transition: 250ms;
 }
 
+h1, h2 {
+  color: white;
+}
+
+h1 {
+  font-size: 60px;
+  border-bottom: 10px solid white;
+}
+
+h2 {
+  font-size: 40px;
+}
+
 .player-cell h3 {
   margin-top: 0;
 }
