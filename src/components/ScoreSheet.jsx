@@ -144,7 +144,7 @@ class ScoreSheet extends React.Component {
         <h1>Score Sheet</h1>
         <h2>How many imposters?</h2>
         <div style={{width: "25%"}}>
-          <Dropdown options={[1,2,3]} onChange={(value) => this.setState({imposterCount: value}) } value={this.state.imposterCount} placeholder="Select 1-3" />
+          <Dropdown options={[1,2,3]} onChange={(value) => this.setState({imposterCount: value.value}) } value={this.state.imposterCount} placeholder="Select 1-3" />
         </div>
         <h2>Who won? (Currently set to {this.state.winner === CREW_WIN ? "Crew" : "Imposter"})</h2>
         <button onClick={this.toggleWinner}>
