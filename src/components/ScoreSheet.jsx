@@ -27,7 +27,8 @@ class ScoreSheet extends React.Component {
         "lisshay": {},
         "a": {}
       },
-      winner: CREW_WIN
+      winner: CREW_WIN,
+      imposterCount: 3
     };
 
     this.toggleImposter = this.toggleImposter.bind(this);
@@ -50,7 +51,7 @@ class ScoreSheet extends React.Component {
       [playerId]: updatedPlayer
     };
 
-    if (Object.values(updatedPlayers).filter(info => info.isImposter).length > 3) {
+    if (Object.values(updatedPlayers).filter(info => info.isImposter).length > this.state.imposterCount) {
       alert("Too many imposters");
       return;
     }
