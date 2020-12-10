@@ -6,6 +6,15 @@ import '../ScoreSheet.css'
 const CREW_WIN = 0;
 const IMPOSTER_WIN = 1;
 
+// TODO: Dictionary vs Array?
+const registeredPlayers = [
+  {id: "z"},
+  {id: "bermang"},
+  {id: "Loki"},
+  {id: "lisshay"},
+  {id: "a"}
+]
+
 class ScoreSheet extends React.Component {
   constructor(props) {
     super(props);
@@ -65,6 +74,15 @@ class ScoreSheet extends React.Component {
     });
 
     alert(JSON.stringify(backendResult, null, 2));
+  }
+
+  // TODO Implement these from the registered player list
+  addPlayer(playerId) {
+
+  }
+
+  removePlayer(playerId) {
+
   }
 
   playerWon(playerId) {
