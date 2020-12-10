@@ -2,6 +2,9 @@ import React from 'react';
 import axios from 'axios';
 import urljoin from 'url-join';
 
+import Dropdown from 'react-dropdown';
+import 'react-dropdown/style.css';
+
 import GamePlayer from './sub_components/GamePlayer';
 import RegisteredPlayer from './sub_components/RegisteredPlayer';
 import '../ScoreSheet.css'
@@ -27,7 +30,7 @@ class ScoreSheet extends React.Component {
       },
       allPlayers: {},
       winner: CREW_WIN,
-      imposterCount: 3
+      imposterCount: 1
     };
 
     this.toggleImposter = this.toggleImposter.bind(this);
@@ -139,6 +142,10 @@ class ScoreSheet extends React.Component {
     return (
       <div>
         <h1>Score Sheet</h1>
+        <h2>How many imposters?</h2>
+        <div style={{width: "25%"}}>
+          <Dropdown options={[1,2,3]} onChange={(value) => this.setState({imposterCount: value}) } value={this.state.imposterCount} placeholder="Select 1-3" />
+        </div>
         <h2>Who won? (Currently set to {this.state.winner === CREW_WIN ? "Crew" : "Imposter"})</h2>
         <button onClick={this.toggleWinner}>
           No, {this.state.winner === CREW_WIN ? "Imposter(s)" : "Crew"} won
