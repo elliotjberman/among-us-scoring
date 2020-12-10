@@ -6,6 +6,12 @@ export default function Player(props) {
       <button onClick={() => props.imposterCallback(props.playerId)}>
         {props.info.isImposter ? "Was Not Imposter" : "Was Imposter"}
       </button>
+      <br/>
+      <br/>
+
+      <button onClick={() => props.deleteCallback(props.playerId)}>
+        Remove from session
+      </button>
     </div>
   );
 }

@@ -32,6 +32,7 @@ class ScoreSheet extends React.Component {
 
     this.toggleImposter = this.toggleImposter.bind(this);
     this.toggleWinner = this.toggleWinner.bind(this);
+    this.removePlayer = this.removePlayer.bind(this);
     this.submitResults = this.submitResults.bind(this);
   }
 
@@ -82,7 +83,9 @@ class ScoreSheet extends React.Component {
   }
 
   removePlayer(playerId) {
-
+    const updatedPlayers = {... this.state.players};
+    delete updatedPlayers[playerId];
+    this.setState({players: updatedPlayers});
   }
 
   playerWon(playerId) {
@@ -95,7 +98,7 @@ class ScoreSheet extends React.Component {
     playerEntries = playerEntries.sort((a,b) => {
       return a[0].toLowerCase().localeCompare(b[0].toLowerCase());
     });
-    const playerCells = playerEntries.map(([id, info]) => <Player key={id} playerId={id} info={info} imposterCallback={this.toggleImposter}/> );
+    const playerCells = playerEntries.map(([id, info]) => <Player key={id} playerId={id} info={info} imposterCallback={this.toggleImposter} deleteCallback={this.removePlayer}/> );
 
     return (
       <div>
