@@ -1,0 +1,19 @@
+.player-cell {
+  background: #8b8e90;
+  color: white;
+  display: block;
+  width: 25%;
+  padding: 20px 25px 20px;
+  margin-bottom: 10px;
+  border-radius: 20px;
+
+  transition: 250ms;
+}
+
+.player-cell h3 {
+  margin-top: 0;
+}
+
+.player-cell.imposter {
+  background-color: #bf412d;
+}
