@@ -88,8 +88,9 @@ class ScoreSheet extends React.Component {
   }
 
   async submitResults() {
+    const cleanedPlayers = Object.values(this.state.players).map(playerInfo => ({_id: playerInfo.id}));
     const sessionData = {
-      players: this.state.players,
+      players: cleanedPlayers,
       winner: this.state.winner,
       imposterIds: Object.values(this.state.players).filter(player => player.isImposter).map(player => player.id),
     }
