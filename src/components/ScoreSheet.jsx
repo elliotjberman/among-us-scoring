@@ -97,16 +97,16 @@ class ScoreSheet extends React.Component {
     const response = await axios.post(urljoin(process.env.REACT_APP_SESSION_SVC, "sessions/"), {session: sessionData});
   }
 
-  addPlayer(playerId) {
+  async addPlayer(playerId) {
     const updatedPlayers = {... this.state.players};
     updatedPlayers[playerId] = this.state.allPlayers[playerId];
-    this.setState({players: updatedPlayers});
+    await this.setState({players: updatedPlayers});
   }
 
-  removePlayer(playerId) {
+  async removePlayer(playerId) {
     const updatedPlayers = {... this.state.players};
     delete updatedPlayers[playerId];
-    this.setState({players: updatedPlayers});
+    await this.setState({players: updatedPlayers});
   }
 
   playerWon(playerId) {
