@@ -78,7 +78,6 @@ class ScoreSheet extends React.Component {
       return;
     }
 
-
     await this.setState(prevState => ({
       ...prevState,
       players: updatedPlayers
@@ -91,7 +90,7 @@ class ScoreSheet extends React.Component {
   }
 
   async submitResults() {
-    const cleanedPlayers = Object.values(this.state.players).map(playerInfo => ({_id: playerInfo.id}));
+    const cleanedPlayers = Object.values(this.state.players).map(playerInfo => ({player_id: playerInfo.id}));
     const sessionData = {
       players: cleanedPlayers,
       winner: this.state.winner,
@@ -102,10 +101,7 @@ class ScoreSheet extends React.Component {
       return;
     }
 
-    alert(JSON.stringify(sessionData, null, 4));
-    return;
-
-    const response = await axios.post(urljoin(process.env.REACT_APP_SESSION_SVC, "sessions"), sessionData);
+    const response = await axios.post(urljoin(process.env.REACT_APP_SESSION_SVC, "sessions/"), {session: sessionData});
   }
 
   addPlayer(playerId) {
