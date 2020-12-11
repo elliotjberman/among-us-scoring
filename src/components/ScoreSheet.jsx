@@ -1,6 +1,12 @@
 import React from 'react';
+import axios from 'axios';
+import urljoin from 'url-join';
 
-import Player from './sub_components/Player';
+import Dropdown from 'react-dropdown';
+import 'react-dropdown/style.css';
+
+import GamePlayer from './sub_components/GamePlayer';
+import RegisteredPlayer from './sub_components/RegisteredPlayer';
 import '../ScoreSheet.css'
 
 const CREW_WIN = 0;
@@ -8,11 +14,11 @@ const IMPOSTER_WIN = 1;
 
 // TODO: Dictionary vs Array?
 const registeredPlayers = [
-  {id: "z"},
-  {id: "bermang"},
-  {id: "Loki"},
-  {id: "lisshay"},
-  {id: "a"}
+  {_id: "1", gamertag: "z"},
+  {_id: "2", gamertag: "bermang"},
+  {_id: "3", gamertag: "Loki"},
+  {_id: "4", gamertag: "lisshay"},
+  {_id: "5", gamertag: "a"}
 ]
 
 class ScoreSheet extends React.Component {
@@ -21,20 +27,29 @@ class ScoreSheet extends React.Component {
 
     this.state = {
       players: {
-        "z": {},
-        "bermang": {},
-        "Loki": {},
-        "lisshay": {},
-        "a": {}
       },
+      allPlayers: {},
       winner: CREW_WIN,
-      imposterCount: 3
+      imposterCount: 1
     };
 
     this.toggleImposter = this.toggleImposter.bind(this);
     this.toggleWinner = this.toggleWinner.bind(this);
+    this.addPlayer = this.addPlayer.bind(this);
     this.removePlayer = this.removePlayer.bind(this);
     this.submitResults = this.submitResults.bind(this);
+  }
+
+  async componentDidMount() {
+    const response = await axios.get(urljoin(process.env.REACT_APP_SESSION_SVC, "players"));
+    const players = {}
+    response.data.players.forEach(player => {
+      players[player._id] = {
+        gamertag: player.gamertag,
+        id: player._id
+      };
+    });
+    await this.setState({allPlayers: players});
   }
 
   async clearResults() {
@@ -56,7 +71,6 @@ class ScoreSheet extends React.Component {
       return;
     }
 
-
     await this.setState(prevState => ({
       ...prevState,
       players: updatedPlayers
@@ -69,24 +83,30 @@ class ScoreSheet extends React.Component {
   }
 
   async submitResults() {
-    const backendResult = {};
-    Object.entries(this.state.players).forEach(([id, info]) => {
-      const keyName = this.state.players[id].isImposter ? "imposter" : "crew";
-      backendResult[id] = {[keyName]: this.playerWon(id) ? "+1" : "-1"}
-    });
+    const cleanedPlayers = Object.values(this.state.players).map(playerInfo => ({player_id: playerInfo.id}));
+    const sessionData = {
+      players: cleanedPlayers,
+      winner: this.state.winner,
+      imposterIds: Object.values(this.state.players).filter(player => player.isImposter).map(player => ({player_id: player.id})),
+    }
+    if (this.state.imposterCount != sessionData.imposterIds.length) {
+      alert(`Wrong number of imposters; expected ${this.state.imposterCount} but got ${sessionData.imposterIds.length}`);
+      return;
+    }
 
-    alert(JSON.stringify(backendResult, null, 2));
+    const response = await axios.post(urljoin(process.env.REACT_APP_SESSION_SVC, "sessions/"), {session: sessionData});
   }
 
-  // TODO Implement these from the registered player list
-  addPlayer(playerId) {
-
+  async addPlayer(playerId) {
+    const updatedPlayers = {... this.state.players};
+    updatedPlayers[playerId] = this.state.allPlayers[playerId];
+    await this.setState({players: updatedPlayers});
   }
 
-  removePlayer(playerId) {
+  async removePlayer(playerId) {
     const updatedPlayers = {... this.state.players};
     delete updatedPlayers[playerId];
-    this.setState({players: updatedPlayers});
+    await this.setState({players: updatedPlayers});
   }
 
   playerWon(playerId) {
@@ -97,23 +117,40 @@ class ScoreSheet extends React.Component {
   render() {
     let playerEntries = Object.entries(this.state.players);
     playerEntries = playerEntries.sort((a,b) => {
-      return a[0].toLowerCase().localeCompare(b[0].toLowerCase());
+      return a[1].gamertag.toLowerCase().localeCompare(b[1].gamertag.toLowerCase());
     });
-    const playerCells = playerEntries.map(([id, info]) => <Player key={id} playerId={id} info={info} imposterCallback={this.toggleImposter} deleteCallback={this.removePlayer}/> );
+    const playerCells = playerEntries.map(([id, info]) => <GamePlayer key={id} playerId={id} info={info} imposterCallback={this.toggleImposter} deleteCallback={this.removePlayer}/> );
+
+    let registeredPlayerEntries = Object.entries(this.state.allPlayers).filter(([id, info]) => this.state.players[id] === undefined);
+    registeredPlayerEntries = registeredPlayerEntries.sort((a,b) => {
+      return a[1].gamertag.toLowerCase().localeCompare(b[1].gamertag.toLowerCase());
+    });
+    const registeredPlayerCells = registeredPlayerEntries.map(([id, info]) => <RegisteredPlayer key={id} playerId={id} info={info} addCallback={this.addPlayer}/> );
 
     return (
       <div>
         <h1>Score Sheet</h1>
-        <button onClick={this.submitResults}>
-          Submit Results
-        </button>
-        <h2>Players</h2>
-        {playerCells}
-
+        <h2>How many imposters?</h2>
+        <div style={{width: "25%"}}>
+          <Dropdown options={[1,2,3]} onChange={(value) => this.setState({imposterCount: value.value}) } value={this.state.imposterCount} placeholder="Select 1-3" />
+        </div>
         <h2>Who won? (Currently set to {this.state.winner === CREW_WIN ? "Crew" : "Imposter"})</h2>
         <button onClick={this.toggleWinner}>
           No, {this.state.winner === CREW_WIN ? "Imposter(s)" : "Crew"} won
+        </button><br/><br/>
+        <button onClick={this.submitResults}>
+          Submit Results
         </button>
+        <div className="list-container">
+          <div className="half-screen">
+            <h2>Active Players</h2>
+            {playerCells}
+          </div>
+          <div className="half-screen">
+            <h2>Registered Players</h2>
+            {registeredPlayerCells}
+          </div>
+        </div>
       </div>
     );
   }

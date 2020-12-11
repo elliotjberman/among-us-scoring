@@ -1,13 +1,24 @@
+.list-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 15px;
+  box-sizing: border-box;
+}
+.half-screen {
+  width: 100%;
+  margin-right: 15px;
+}
 .player-cell {
-  background: #88ce8e;
   color: white;
+  background: gray;
   display: block;
-  width: 25%;
+  width: 100%;
   padding: 20px 25px 20px;
   margin-bottom: 10px;
   border-radius: 20px;
-
   transition: 250ms;
+  box-sizing: border-box;
 }
 
 h1, h2 {
@@ -25,6 +36,10 @@ h2 {
 
 .player-cell h3 {
   margin-top: 0;
+}
+
+.player-cell.crew {
+  background-color: #88ce8e;
 }
 
 .player-cell.imposter {
