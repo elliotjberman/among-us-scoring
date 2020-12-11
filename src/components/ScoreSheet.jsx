@@ -100,7 +100,6 @@ class ScoreSheet extends React.Component {
   addPlayer(playerId) {
     const updatedPlayers = {... this.state.players};
     updatedPlayers[playerId] = this.state.allPlayers[playerId];
-    console.log(playerId);
     this.setState({players: updatedPlayers});
   }
 
