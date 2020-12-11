@@ -41,16 +41,9 @@ class ScoreSheet extends React.Component {
   }
 
   async componentDidMount() {
-    // const response = await axios.get(urljoin(process.env.REACT_APP_SESSION_SVC, "players"));
-    // const players = {}
-    // response.data.players.forEach(player => {
-    //   players[player._id] = {
-    //     gamertag: player.gamertag,
-    //     id: player._id
-    //   };
-    // });
+    const response = await axios.get(urljoin(process.env.REACT_APP_SESSION_SVC, "players"));
     const players = {}
-    registeredPlayers.forEach(player => {
+    response.data.players.forEach(player => {
       players[player._id] = {
         gamertag: player.gamertag,
         id: player._id
@@ -94,7 +87,7 @@ class ScoreSheet extends React.Component {
     const sessionData = {
       players: cleanedPlayers,
       winner: this.state.winner,
-      imposterIds: Object.values(this.state.players).filter(player => player.isImposter).map(player => player.id),
+      imposterIds: Object.values(this.state.players).filter(player => player.isImposter).map(player => ({player_id: player.id})),
     }
     if (this.state.imposterCount != sessionData.imposterIds.length) {
       alert(`Wrong number of imposters; expected ${this.state.imposterCount} but got ${sessionData.imposterIds.length}`);
