@@ -12,15 +12,6 @@ import '../ScoreSheet.css'
 const CREW_WIN = 0;
 const IMPOSTER_WIN = 1;
 
-// TODO: Dictionary vs Array?
-const registeredPlayers = [
-  {_id: "1", gamertag: "z"},
-  {_id: "2", gamertag: "bermang"},
-  {_id: "3", gamertag: "Loki"},
-  {_id: "4", gamertag: "lisshay"},
-  {_id: "5", gamertag: "a"}
-]
-
 class ScoreSheet extends React.Component {
   constructor(props) {
     super(props);
@@ -53,8 +44,14 @@ class ScoreSheet extends React.Component {
   }
 
   async clearResults() {
-    const adjustedPlayers = this.players.map(player => {return {id: player.id}});
-    await this.setState({player: adjustedPlayers, winner: null});
+    const players = {}
+    Object.values(this.state.players).forEach(player => {
+      players[player.id] = {
+        gamertag: player.gamertag,
+        id: player.id
+      };
+    });
+    await this.setState({players, winner: null});
   }
 
   async toggleImposter(playerId) {
@@ -95,6 +92,7 @@ class ScoreSheet extends React.Component {
     }
 
     const response = await axios.post(urljoin(process.env.REACT_APP_SESSION_SVC, "sessions/"), {session: sessionData});
+    await this.clearResults();
   }
 
   async addPlayer(playerId) {
