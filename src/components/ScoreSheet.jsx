@@ -12,6 +12,8 @@ import '../ScoreSheet.css'
 const CREW_WIN = 0;
 const IMPOSTER_WIN = 1;
 
+console.log("Using " + process.env.REACT_APP_SESSION_SVC);
+
 class ScoreSheet extends React.Component {
   constructor(props) {
     super(props);
@@ -32,7 +34,7 @@ class ScoreSheet extends React.Component {
   }
 
   async componentDidMount() {
-    const response = await axios.get(urljoin(process.env.REACT_APP_SESSION_SVC, "players"));
+    const response = await axios.get(urljoin(process.env.REACT_APP_SESSION_SVC, "players/"));
     const players = {}
     response.data.players.forEach(player => {
       players[player._id] = {
