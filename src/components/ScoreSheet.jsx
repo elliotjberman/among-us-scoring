@@ -9,9 +9,6 @@ import GamePlayer from './sub_components/GamePlayer';
 import RegisteredPlayer from './sub_components/RegisteredPlayer';
 import '../ScoreSheet.css'
 
-const CREW_WIN = 0;
-const IMPOSTER_WIN = 1;
-
 console.log("Using " + process.env.REACT_APP_SESSION_SVC);
 
 class ScoreSheet extends React.Component {
@@ -22,7 +19,7 @@ class ScoreSheet extends React.Component {
       players: {
       },
       allPlayers: {},
-      winner: CREW_WIN,
+      impostersWon: false,
       imposterCount: 1
     };
 
@@ -53,7 +50,7 @@ class ScoreSheet extends React.Component {
         id: player.id
       };
     });
-    await this.setState({players, winner: null});
+    await this.setState({players, impostersWon: false});
   }
 
   async toggleImposter(playerId) {
@@ -78,18 +75,19 @@ class ScoreSheet extends React.Component {
   }
 
   async toggleWinner() {
-    await this.setState({winner: Number(!this.state.winner)});
+    await this.setState({impostersWon: !this.state.impostersWon});
   }
 
   async submitResults() {
-    const cleanedPlayers = Object.values(this.state.players).map(playerInfo => ({player_id: playerInfo.id}));
+    const cleanedPlayers = Object.values(this.state.players).map(playerInfo => ({player_id: playerInfo.id, is_imposter: Boolean(playerInfo.isImposter)}));
+    console.log(cleanedPlayers);
     const sessionData = {
       players: cleanedPlayers,
-      winner: this.state.winner,
-      imposterIds: Object.values(this.state.players).filter(player => player.isImposter).map(player => ({player_id: player.id})),
+      imposters_won: this.state.impostersWon,
     }
-    if (this.state.imposterCount != sessionData.imposterIds.length) {
-      alert(`Wrong number of imposters; expected ${this.state.imposterCount} but got ${sessionData.imposterIds.length}`);
+    const howManyImposters = Object.values(cleanedPlayers).filter(player => player.is_imposter).map(player => ({player_id: player.id})).length;
+    if (this.state.imposterCount != howManyImposters) {
+      alert(`Wrong number of imposters; expected ${this.state.imposterCount} but got ${howManyImposters}`);
       return;
     }
 
@@ -107,11 +105,6 @@ class ScoreSheet extends React.Component {
     const updatedPlayers = {... this.state.players};
     delete updatedPlayers[playerId];
     await this.setState({players: updatedPlayers});
-  }
-
-  playerWon(playerId) {
-    if (this.state.players[playerId].isImposter) return this.state.winner === IMPOSTER_WIN;
-    return this.state.winner === CREW_WIN;
   }
 
   render() {
@@ -134,9 +127,9 @@ class ScoreSheet extends React.Component {
         <div style={{width: "25%"}}>
           <Dropdown options={[1,2,3]} onChange={(value) => this.setState({imposterCount: value.value}) } value={this.state.imposterCount} placeholder="Select 1-3" />
         </div>
-        <h2>Who won? (Currently set to {this.state.winner === CREW_WIN ? "Crew" : "Imposter"})</h2>
+        <h2>Who won? (Currently set to {this.state.impostersWon ? "Imposter" :  "Crew"})</h2>
         <button onClick={this.toggleWinner}>
-          No, {this.state.winner === CREW_WIN ? "Imposter(s)" : "Crew"} won
+          No, {this.state.impostersWon ? "Crew" : "Imposter(s)"} won
         </button><br/><br/>
         <button onClick={this.submitResults}>
           Submit Results
