@@ -1,0 +1,27 @@
+@import "../styles/colors.module.scss";
+
+nav {
+  width: 100%;
+  display: flex;
+  background: white;
+  border-bottom: 5px solid $primary-dark-100;
+
+
+  a {
+    padding: 10px 20px;
+    text-decoration: none;
+    color: $highlight-orange-200;
+    font-size: 20px;
+    transition: 150ms;
+
+    &:hover {
+      background: $primary-light;
+      color: $highlight-orange-300;
+    }
+
+    &.selected {
+      background: $highlight-orange-100;
+      color: $white;
+    }
+  }
+}

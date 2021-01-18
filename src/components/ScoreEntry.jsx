@@ -7,11 +7,11 @@ import 'react-dropdown/style.css';
 
 import GamePlayer from './sub_components/GamePlayer';
 import RegisteredPlayer from './sub_components/RegisteredPlayer';
-import '../ScoreSheet.css'
+import './ScoreEntry.scss';
 
-console.log("Using " + process.env.REACT_APP_SESSION_SVC);
+const PASSWORD = "steadyeddie123"
 
-class ScoreSheet extends React.Component {
+class ScoreEntry extends React.Component {
   constructor(props) {
     super(props);
 
@@ -20,7 +20,9 @@ class ScoreSheet extends React.Component {
       },
       allPlayers: {},
       impostersWon: false,
-      imposterCount: 1
+      imposterCount: 1,
+      passwordEntered: false,
+      password: ""
     };
 
     this.toggleImposter = this.toggleImposter.bind(this);
@@ -80,34 +82,47 @@ class ScoreSheet extends React.Component {
 
   async submitResults() {
     const cleanedPlayers = Object.values(this.state.players).map(playerInfo => ({player_id: playerInfo.id, is_imposter: Boolean(playerInfo.isImposter)}));
-    console.log(cleanedPlayers);
     const sessionData = {
       players: cleanedPlayers,
       imposters_won: this.state.impostersWon,
     }
     const howManyImposters = Object.values(cleanedPlayers).filter(player => player.is_imposter).map(player => ({player_id: player.id})).length;
-    if (this.state.imposterCount != howManyImposters) {
+    if (this.state.imposterCount !== howManyImposters) {
       alert(`Wrong number of imposters; expected ${this.state.imposterCount} but got ${howManyImposters}`);
       return;
     }
 
-    const response = await axios.post(urljoin(process.env.REACT_APP_SESSION_SVC, "sessions/"), {session: sessionData});
+    await axios.post(urljoin(process.env.REACT_APP_SESSION_SVC, "sessions/"), {session: sessionData});
     await this.clearResults();
   }
 
   async addPlayer(playerId) {
-    const updatedPlayers = {... this.state.players};
+    const updatedPlayers = {...this.state.players};
     updatedPlayers[playerId] = this.state.allPlayers[playerId];
     await this.setState({players: updatedPlayers});
   }
 
   async removePlayer(playerId) {
-    const updatedPlayers = {... this.state.players};
+    const updatedPlayers = {...this.state.players};
     delete updatedPlayers[playerId];
     await this.setState({players: updatedPlayers});
   }
 
+  async handlePasswordChange(e) {
+    await this.setState({password: e.target.value});
+    await this.setState({passwordEntered: this.state.password === PASSWORD});
+  }
+
   render() {
+    if (!this.state.passwordEntered) {
+      return (
+        <div>
+          <h1>Enter Password</h1>
+          <input type="password" onChange={(e) => this.handlePasswordChange(e)} value={this.state.password} />
+        </div>
+      )
+    }
+
     let playerEntries = Object.entries(this.state.players);
     playerEntries = playerEntries.sort((a,b) => {
       return a[1].gamertag.toLowerCase().localeCompare(b[1].gamertag.toLowerCase());
@@ -122,7 +137,7 @@ class ScoreSheet extends React.Component {
 
     return (
       <div>
-        <h1>Score Sheet</h1>
+        <h1>Score Entry</h1>
         <h2>How many imposters?</h2>
         <div style={{width: "25%"}}>
           <Dropdown options={[1,2,3]} onChange={(value) => this.setState({imposterCount: value.value}) } value={this.state.imposterCount} placeholder="Select 1-3" />
@@ -150,4 +165,4 @@ class ScoreSheet extends React.Component {
 
 };
 
-export default ScoreSheet;
+export default ScoreEntry;
