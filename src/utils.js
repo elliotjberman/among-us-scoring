@@ -15,7 +15,13 @@ const sortNumbers = (a, b, reverse=false) => {
   return 0;
 }
 
+const calculateWinPercentage = (recordData) => {
+  const result = Math.round(recordData.win_count / (recordData.win_count + recordData.loss_count) * 100);
+  return isNaN(result) ? 0 : result;
+}
+
 export {
   sortCaseInsensitive,
-  sortNumbers
+  sortNumbers,
+  calculateWinPercentage
 }

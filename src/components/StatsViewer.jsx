@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import urljoin from 'url-join';
 
-import {sortCaseInsensitive, sortNumbers} from '../utils';
+import {sortCaseInsensitive, sortNumbers, calculateWinPercentage} from '../utils';
 
 import StatPlayer from './sub_components/StatPlayer';
 import './StatsViewer.scss';
@@ -25,7 +25,7 @@ class StatsViewer extends React.Component {
     },
     crewmateRatio: {
       label: "Crewmate Win/Loss %",
-      lambda: ([aId, aData],[bId, bData]) => { return sortNumbers(aData.crewmate_data.win_count / aData.crewmate_data.loss_count, bData.crewmate_data.win_count / bData.crewmate_data.loss_count) }
+      lambda: ([aId, aData],[bId, bData]) => { return sortNumbers(calculateWinPercentage(aData.crewmate_data), calculateWinPercentage(bData.crewmate_data)) }
     },
     imposterWins: {
       label: "Imposter Wins",
@@ -33,7 +33,7 @@ class StatsViewer extends React.Component {
     },
     imposterRatio: {
       label: "Imposter Win/Loss %",
-      lambda: ([aId, aData],[bId, bData]) => { return sortNumbers(aData.imposter_data.win_count / aData.imposter_data.loss_count, bData.imposter_data.win_count / bData.imposter_data.loss_count) }
+      lambda: ([aId, aData],[bId, bData]) => { return sortNumbers(calculateWinPercentage(aData.imposter_data), calculateWinPercentage(bData.imposter_data)) }
     }
   }
 

@@ -1,4 +1,4 @@
-
+import {calculateWinPercentage} from '../../utils';
 
 
 export default function StatPlayer(props) {
@@ -6,14 +6,14 @@ export default function StatPlayer(props) {
   const {playerInfo, crewmate_data: crewmateData, imposter_data: imposterData, games_played: gamesPlayed} = props.playerData;
   return (
     <div className="player-cell">
-      <h3>{rank}. {playerInfo.gamertag} - {gamesPlayed} Total Games</h3>
+      <h3>{rank}. {playerInfo.gamertag} | {gamesPlayed} Total Games</h3>
       <div className="stats-display">
         <div className="role-stat">
-          <h4>Crewmate - {calculateWinPercentage(crewmateData)}%</h4>
+          <h4>Crewmate | {calculateWinPercentage(crewmateData)}%</h4>
           <WinRecord record={crewmateData} />
         </div>
         <div className="role-stat">
-          <h4>Imposter - {calculateWinPercentage(imposterData)}%</h4>
+          <h4>Imposter | {calculateWinPercentage(imposterData)}%</h4>
           <WinRecord record={imposterData} />
         </div>
       </div>
@@ -29,9 +29,4 @@ const WinRecord = (props) => {
       <h5 className="losses">{lossCount}</h5>
     </div>
   )
-}
-
-function calculateWinPercentage(recordData) {
-  const result = Math.round(recordData.win_count / (recordData.win_count + recordData.loss_count) * 100);
-  return isNaN(result) ? 0 : result;
 }
