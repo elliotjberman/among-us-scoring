@@ -7,6 +7,8 @@ import {sortCaseInsensitive, sortNumbers} from '../utils';
 import StatPlayer from './sub_components/StatPlayer';
 import './StatsViewer.scss';
 
+// TODO: Deal with NaN's
+
 class StatsViewer extends React.Component {
   static sorts = {
     gamertag: {
@@ -40,7 +42,8 @@ class StatsViewer extends React.Component {
 
     this.state = {
       players: {},
-      sortingKey: "gamertag"
+      sortingKey: "gamertag",
+      minGames: 0
     };
   }
 
@@ -63,13 +66,25 @@ class StatsViewer extends React.Component {
     this.setState({sortingKey});
   }
 
+  async handleChange(event) {
+    await this.setState({minGames: event.target.value});
+  }
+
   render() {
-    const playerEntries = Object.entries(this.state.players);
+    const playerEntries = Object.entries(this.state.players).filter(([playerId, playerData]) => playerData.games_played >= this.state.minGames);
     playerEntries.sort(StatsViewer.sorts[this.state.sortingKey].lambda);
 
     return (
       <div>
         <h1>Stats Viewer</h1>
+        <h2>Minimum Games: {this.state.minGames}</h2>
+          <input
+            id="typeinp"
+            type="range"
+            min="0" max={Math.max(...playerEntries.map(([playerId, playerData]) => playerData.games_played)) }
+            value={this.state.minGames}
+            onChange={(e) => this.handleChange(e)}
+            step="1"/>
         <h2>Sorted by {StatsViewer.sorts[this.state.sortingKey].label}</h2>
         <div className="sorts-container">
           {

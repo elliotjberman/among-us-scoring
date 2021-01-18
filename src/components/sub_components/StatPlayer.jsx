@@ -30,7 +30,7 @@ const WinRecord = (props) => {
   )
 }
 
-// TODO: Put in utils
 function calculateWinPercentage(recordData) {
-  return Math.round(recordData.win_count / (recordData.win_count + recordData.loss_count) * 100);
+  const result = Math.round(recordData.win_count / (recordData.win_count + recordData.loss_count) * 100);
+  return isNaN(result) ? 0 : result;
 }
