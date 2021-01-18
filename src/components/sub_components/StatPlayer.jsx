@@ -12,7 +12,7 @@ export default function StatPlayer(props) {
           <WinRecord record={crewmateData} />
         </div>
         <div className="role-stat">
-          <h4>Imposter - {calculateWinPercentage(crewmateData)}%</h4>
+          <h4>Imposter - {calculateWinPercentage(imposterData)}%</h4>
           <WinRecord record={imposterData} />
         </div>
       </div>
