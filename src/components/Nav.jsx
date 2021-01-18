@@ -1,17 +1,17 @@
 import React from 'react';
 import {
   BrowserRouter as Router,
-  Link
+  NavLink
 } from "react-router-dom";
-
 
 import '../Nav.scss'
 
 const Nav = () => {
   return (
     <nav>
-      <Link to="/score_entry">Score Entry</Link>
-      <Link to="/stats_viewer">Stats Viewer</Link>
+      <NavLink exact to="/" activeClassName="selected">Home</NavLink>
+      <NavLink to="/score_entry" activeClassName="selected">Score Entry</NavLink>
+      <NavLink to="/stats_viewer" activeClassName="selected">Stats Viewer</NavLink>
     </nav>
   )
 }
