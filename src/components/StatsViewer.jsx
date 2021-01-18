@@ -22,15 +22,15 @@ class StatsViewer extends React.Component {
       lambda: ([aId, aData],[bId, bData]) => { return sortNumbers(aData.imposter_data.win_count, bData.imposter_data.win_count) }
     },
     crewmateRatio: {
-      label: "Crewmate Win/Loss Ratio",
+      label: "Crewmate Win/Loss %",
       lambda: ([aId, aData],[bId, bData]) => { return sortNumbers(aData.crewmate_data.win_count / aData.crewmate_data.loss_count, bData.crewmate_data.win_count / bData.crewmate_data.loss_count) }
     },
     imposterRatio: {
-      label: "Imposter Win/Loss Ratio",
+      label: "Imposter Win/Loss %",
       lambda: ([aId, aData],[bId, bData]) => { return sortNumbers(aData.imposter_data.win_count / aData.imposter_data.loss_count, bData.imposter_data.win_count / bData.imposter_data.loss_count) }
     },
     totalGames: {
-      label: "Games Played",
+      label: "Total Games Played",
       lambda: ([aId, aData],[bId, bData]) => { return sortNumbers(aData.games_played, bData.games_played) }
     }
   }
