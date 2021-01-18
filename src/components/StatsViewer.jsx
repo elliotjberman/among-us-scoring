@@ -19,13 +19,13 @@ class StatsViewer extends React.Component {
       label: "Crewmate Wins",
       lambda: ([aId, aData],[bId, bData]) => { return sortNumbers(aData.crewmate_data.win_count, bData.crewmate_data.win_count) }
     },
-    imposterWins: {
-      label: "Imposter Wins",
-      lambda: ([aId, aData],[bId, bData]) => { return sortNumbers(aData.imposter_data.win_count, bData.imposter_data.win_count) }
-    },
     crewmateRatio: {
       label: "Crewmate Win/Loss %",
       lambda: ([aId, aData],[bId, bData]) => { return sortNumbers(aData.crewmate_data.win_count / aData.crewmate_data.loss_count, bData.crewmate_data.win_count / bData.crewmate_data.loss_count) }
+    },
+    imposterWins: {
+      label: "Imposter Wins",
+      lambda: ([aId, aData],[bId, bData]) => { return sortNumbers(aData.imposter_data.win_count, bData.imposter_data.win_count) }
     },
     imposterRatio: {
       label: "Imposter Win/Loss %",
@@ -93,7 +93,7 @@ class StatsViewer extends React.Component {
             })
           }
         </div>
-        {playerEntries.map(([playerId, playerData], i) => <StatPlayer key={playerId} playerData={playerData} />)}
+        {playerEntries.map(([playerId, playerData], i) => <StatPlayer key={playerId} playerData={playerData} rank={i+1} />)}
       </div>
     )
   }
