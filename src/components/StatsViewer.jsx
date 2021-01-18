@@ -11,9 +11,13 @@ import './StatsViewer.scss';
 
 class StatsViewer extends React.Component {
   static sorts = {
-    gamertag: {
-      label: "Gamertag",
-      lambda: ([aId, aData],[bId, bData]) => { return sortCaseInsensitive(aData.playerInfo.gamertag, bData.playerInfo.gamertag) }
+    // gamertag: {
+    //   label: "Gamertag",
+    //   lambda: ([aId, aData],[bId, bData]) => { return sortCaseInsensitive(aData.playerInfo.gamertag, bData.playerInfo.gamertag) }
+    // },
+    totalGames: {
+      label: "Total Games Played",
+      lambda: ([aId, aData],[bId, bData]) => { return sortNumbers(aData.games_played, bData.games_played) }
     },
     crewmateWins: {
       label: "Crewmate Wins",
@@ -30,10 +34,6 @@ class StatsViewer extends React.Component {
     imposterRatio: {
       label: "Imposter Win/Loss %",
       lambda: ([aId, aData],[bId, bData]) => { return sortNumbers(aData.imposter_data.win_count / aData.imposter_data.loss_count, bData.imposter_data.win_count / bData.imposter_data.loss_count) }
-    },
-    totalGames: {
-      label: "Total Games Played",
-      lambda: ([aId, aData],[bId, bData]) => { return sortNumbers(aData.games_played, bData.games_played) }
     }
   }
 
@@ -42,7 +42,7 @@ class StatsViewer extends React.Component {
 
     this.state = {
       players: {},
-      sortingKey: "gamertag",
+      sortingKey: "totalGames",
       minGames: 0
     };
   }

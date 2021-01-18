@@ -7,7 +7,9 @@ import 'react-dropdown/style.css';
 
 import GamePlayer from './sub_components/GamePlayer';
 import RegisteredPlayer from './sub_components/RegisteredPlayer';
-import './ScoreEntry.scss'
+import './ScoreEntry.scss';
+
+const PASSWORD = "steadyeddie123"
 
 class ScoreEntry extends React.Component {
   constructor(props) {
@@ -18,7 +20,9 @@ class ScoreEntry extends React.Component {
       },
       allPlayers: {},
       impostersWon: false,
-      imposterCount: 1
+      imposterCount: 1,
+      passwordEntered: false,
+      password: ""
     };
 
     this.toggleImposter = this.toggleImposter.bind(this);
@@ -104,7 +108,21 @@ class ScoreEntry extends React.Component {
     await this.setState({players: updatedPlayers});
   }
 
+  async handlePasswordChange(e) {
+    await this.setState({password: e.target.value});
+    await this.setState({passwordEntered: this.state.password === PASSWORD});
+  }
+
   render() {
+    if (!this.state.passwordEntered) {
+      return (
+        <div>
+          <h1>Enter Password</h1>
+          <input type="password" onChange={(e) => this.handlePasswordChange(e)} value={this.state.password} />
+        </div>
+      )
+    }
+
     let playerEntries = Object.entries(this.state.players);
     playerEntries = playerEntries.sort((a,b) => {
       return a[1].gamertag.toLowerCase().localeCompare(b[1].gamertag.toLowerCase());
