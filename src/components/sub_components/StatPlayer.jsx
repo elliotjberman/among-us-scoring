@@ -1,8 +1,8 @@
 export default function StatPlayer(props) {
-  const {playerInfo, crewmate_data: crewmateData, imposter_data: imposterData} = props.playerData;
+  const {playerInfo, crewmate_data: crewmateData, imposter_data: imposterData, games_played: gamesPlayed} = props.playerData;
   return (
     <div className="player-cell">
-      <h3>{playerInfo.gamertag}</h3>
+      <h3>{playerInfo.gamertag} - {gamesPlayed} Total Games</h3>
       <div className="stats-display">
         <div className="role-stat">
           <h4>Crewmate</h4>
