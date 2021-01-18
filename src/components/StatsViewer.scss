@@ -30,3 +30,25 @@
     background-color: $status-red-500;
   }
 }
+
+.sorts-container {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.sort-button {
+  background-color: white;
+  padding: 10px;
+  margin-right: 10px;
+  cursor: pointer;
+  user-select: none;
+  transition: 150ms;
+
+  &:hover {
+    background-color: $highlight-orange-50;
+  }
+
+  &.selected {
+    background-color: $highlight-orange-100;
+  }
+}

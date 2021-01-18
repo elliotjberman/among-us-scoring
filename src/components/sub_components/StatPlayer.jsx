@@ -1,5 +1,4 @@
 export default function StatPlayer(props) {
-  console.log(props.playerData)
   const {playerInfo, crewmate_data: crewmateData, imposter_data: imposterData} = props.playerData;
   return (
     <div className="player-cell">
