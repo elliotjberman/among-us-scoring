@@ -7,11 +7,9 @@ import 'react-dropdown/style.css';
 
 import GamePlayer from './sub_components/GamePlayer';
 import RegisteredPlayer from './sub_components/RegisteredPlayer';
-import '../ScoreSheet.css'
+import '../ScoreEntry.css'
 
-console.log("Using " + process.env.REACT_APP_SESSION_SVC);
-
-class ScoreSheet extends React.Component {
+class ScoreEntry extends React.Component {
   constructor(props) {
     super(props);
 
@@ -80,7 +78,6 @@ class ScoreSheet extends React.Component {
 
   async submitResults() {
     const cleanedPlayers = Object.values(this.state.players).map(playerInfo => ({player_id: playerInfo.id, is_imposter: Boolean(playerInfo.isImposter)}));
-    console.log(cleanedPlayers);
     const sessionData = {
       players: cleanedPlayers,
       imposters_won: this.state.impostersWon,
@@ -122,7 +119,7 @@ class ScoreSheet extends React.Component {
 
     return (
       <div>
-        <h1>Score Sheet</h1>
+        <h1>Score Entry</h1>
         <h2>How many imposters?</h2>
         <div style={{width: "25%"}}>
           <Dropdown options={[1,2,3]} onChange={(value) => this.setState({imposterCount: value.value}) } value={this.state.imposterCount} placeholder="Select 1-3" />
@@ -150,4 +147,4 @@ class ScoreSheet extends React.Component {
 
 };
 
-export default ScoreSheet;
+export default ScoreEntry;

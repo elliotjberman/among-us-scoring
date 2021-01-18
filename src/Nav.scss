@@ -1,0 +1,19 @@
+
+
+nav {
+  width: 100%;
+  display: flex;
+  background: white;
+
+
+  a {
+    padding: 10px 20px;
+    text-decoration: none;
+    color: orange;
+    font-size: 20px;
+
+    &:hover {
+
+    }
+  }
+}
