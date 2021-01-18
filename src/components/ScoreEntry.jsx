@@ -7,7 +7,7 @@ import 'react-dropdown/style.css';
 
 import GamePlayer from './sub_components/GamePlayer';
 import RegisteredPlayer from './sub_components/RegisteredPlayer';
-import '../ScoreEntry.css'
+import './ScoreEntry.scss'
 
 class ScoreEntry extends React.Component {
   constructor(props) {
@@ -83,23 +83,23 @@ class ScoreEntry extends React.Component {
       imposters_won: this.state.impostersWon,
     }
     const howManyImposters = Object.values(cleanedPlayers).filter(player => player.is_imposter).map(player => ({player_id: player.id})).length;
-    if (this.state.imposterCount != howManyImposters) {
+    if (this.state.imposterCount !== howManyImposters) {
       alert(`Wrong number of imposters; expected ${this.state.imposterCount} but got ${howManyImposters}`);
       return;
     }
 
-    const response = await axios.post(urljoin(process.env.REACT_APP_SESSION_SVC, "sessions/"), {session: sessionData});
+    await axios.post(urljoin(process.env.REACT_APP_SESSION_SVC, "sessions/"), {session: sessionData});
     await this.clearResults();
   }
 
   async addPlayer(playerId) {
-    const updatedPlayers = {... this.state.players};
+    const updatedPlayers = {...this.state.players};
     updatedPlayers[playerId] = this.state.allPlayers[playerId];
     await this.setState({players: updatedPlayers});
   }
 
   async removePlayer(playerId) {
-    const updatedPlayers = {... this.state.players};
+    const updatedPlayers = {...this.state.players};
     delete updatedPlayers[playerId];
     await this.setState({players: updatedPlayers});
   }

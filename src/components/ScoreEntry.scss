@@ -1,3 +1,5 @@
+@import "../styles/colors.module.scss";
+
 .list-container {
   display: flex;
   justify-content: center;
@@ -10,7 +12,7 @@
   margin-right: 15px;
 }
 .player-cell {
-  color: white;
+  color: $white;
   background: gray;
   display: block;
   width: 100%;
@@ -22,12 +24,12 @@
 }
 
 h1, h2 {
-  color: white;
+  color: $white;
 }
 
 h1 {
   font-size: 60px;
-  border-bottom: 10px solid white;
+  border-bottom: 10px solid $white;
 }
 
 h2 {
