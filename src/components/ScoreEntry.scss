@@ -23,6 +23,14 @@
   box-sizing: border-box;
 }
 
+.meta-controls {
+    display: flex;
+    justify-content: space-between;
+    div {
+      width: 50%;
+    }
+}
+
 h1, h2 {
   color: $white;
 }

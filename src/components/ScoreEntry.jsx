@@ -92,6 +92,19 @@ class ScoreEntry extends React.Component {
       return;
     }
 
+    const crewmates = Object.values(this.state.players).filter(player => !player.isImposter);
+    const imposters = Object.values(this.state.players).filter(player => player.isImposter);
+
+    const resultString = "Crew:\n" +
+                         crewmates.map(crewmate => crewmate.gamertag).join(", ") + "\n\n" +
+                         "Imposters:\n" +
+                         imposters.map(crewmate => crewmate.gamertag).join(", ") + "\n\n" +
+                         `Winner: ${this.state.impostersWon ? "Imposters" : "Crew"}`
+
+    if (!window.confirm(`Confirm results:\n${resultString}`)) {
+      return;
+    }
+
     await axios.post(urljoin(process.env.REACT_APP_SESSION_SVC, "sessions/"), {session: sessionData});
     await this.clearResults();
   }
@@ -138,14 +151,21 @@ class ScoreEntry extends React.Component {
     return (
       <div>
         <h1>Score Entry</h1>
-        <h2>How many imposters?</h2>
-        <div style={{width: "25%"}}>
-          <Dropdown options={[1,2,3]} onChange={(value) => this.setState({imposterCount: value.value}) } value={this.state.imposterCount} placeholder="Select 1-3" />
+
+        <div className="meta-controls">
+          <div>
+          <h2>How many imposters?</h2>
+            <div>
+              <Dropdown options={[1,2,3]} onChange={(value) => this.setState({imposterCount: value.value}) } value={this.state.imposterCount} placeholder="Select 1-3" />
+            </div>
+          </div>
+          <div>
+            <h2>Who won? (Currently set to {this.state.impostersWon ? "Imposter" :  "Crew"})</h2>
+            <button onClick={this.toggleWinner}>
+              No, {this.state.impostersWon ? "Crew" : "Imposter(s)"} won
+            </button><br/><br/>
+          </div>
         </div>
-        <h2>Who won? (Currently set to {this.state.impostersWon ? "Imposter" :  "Crew"})</h2>
-        <button onClick={this.toggleWinner}>
-          No, {this.state.impostersWon ? "Crew" : "Imposter(s)"} won
-        </button><br/><br/>
         <button onClick={this.submitResults}>
           Submit Results
         </button>
